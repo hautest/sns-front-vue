@@ -1,18 +1,37 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import axios from "axios";
+import router from "@/router";
 
 const email = ref("");
 const password = ref("");
 const rePassword = ref("");
 
-const handleSubmit = (e: Event) => {
+const errorMessage = ref("");
+
+const handleSubmit = async (e: Event) => {
   e.preventDefault();
-  console.log(email.value, password.value, rePassword.value);
+  try {
+    await axios.post("http://localhost:8080/sign-up", {
+      email: email.value,
+      password: password.value,
+      rePassword: rePassword.value,
+    });
+    router.push("/");
+  } catch (error: any) {
+    errorMessage.value = error.response.data.message;
+  }
+};
+const handleRouteSignIn = () => {
+  router.push("/sign-in");
 };
 </script>
 
 <template>
-  <h1>회원가입</h1>
+  <header>
+    <h1>회원가입</h1>
+    <button @click="handleRouteSignIn">로그인</button>
+  </header>
   <form @submit="handleSubmit">
     <div>
       <label for="email">Email</label>
@@ -20,13 +39,19 @@ const handleSubmit = (e: Event) => {
     </div>
     <div>
       <label for="password">비밀번호</label>
-      <input id="password" />
+      <input
+        placeholder="최소 8자 이상, 하나 이상의 숫자 문자 포함"
+        v-model="password"
+        id="password"
+        type="password"
+      />
     </div>
     <div>
       <label for="rePassword">비밀번호 재확인</label>
-      <input id="rePassword" />
+      <input type="password" v-model="rePassword" id="rePassword" />
     </div>
     <div class="submitButton">
+      <span>{{ errorMessage }}</span>
       <button>회원가입</button>
     </div>
   </form>
@@ -43,11 +68,21 @@ div {
   flex-direction: column;
 }
 button {
-  width: 50%;
+  width: 30%;
 }
 .submitButton {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+}
+span {
+  color: red;
+}
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
