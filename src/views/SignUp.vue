@@ -17,7 +17,7 @@ const handleSubmit = async (e: Event) => {
       password: password.value,
       rePassword: rePassword.value,
     });
-    router.push("/");
+    router.push("/sign-in");
   } catch (error: any) {
     errorMessage.value = error.response.data.message;
   }
