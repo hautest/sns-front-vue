@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import router from "@/router";
+import { fetcher } from "@/fetch";
 
 const email = ref("");
 const password = ref("");
@@ -16,6 +17,13 @@ const handleSubmit = async (e: Event) => {
       password: password.value,
     });
     localStorage.setItem("token", result.data.token);
+    fetcher.interceptors.request.use((config) => {
+      const localToken = localStorage.getItem("token");
+      if (localToken) {
+        config.headers.Authorization = localToken;
+      }
+      return config;
+    });
     router.push("/");
   } catch (error: any) {
     errorMessage.value = error.response.data.message;

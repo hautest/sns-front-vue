@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { fetcher } from "@/fetch";
+import router from "@/router";
 import { onMounted } from "vue";
 
 const getPostList = async () => {
