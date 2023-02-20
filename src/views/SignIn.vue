@@ -11,10 +11,11 @@ const errorMessage = ref("");
 const handleSubmit = async (e: Event) => {
   e.preventDefault();
   try {
-    await axios.post("http://localhost:8080/sign-in", {
+    const result = await axios.post("http://localhost:8080/sign-in", {
       email: email.value,
       password: password.value,
     });
+    localStorage.setItem("token", result.data.token);
     router.push("/");
   } catch (error: any) {
     errorMessage.value = error.response.data.message;
