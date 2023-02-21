@@ -8,7 +8,6 @@ interface PostProps {
   comment: {
     author: string;
     content: string;
-    id: number;
   }[];
 }
 

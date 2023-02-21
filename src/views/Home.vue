@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { fetcher } from "@/fetch";
-import router from "@/router";
-import { onMounted } from "vue";
+import post from "../components/Post.vue";
+import { onMounted, ref } from "vue";
+
+const list = ref([]);
 
 const getPostList = async () => {
   const result = await fetcher.get("/post/list");
-  console.log(result);
+  console.log(result.data.list);
+  list.value = result.data.list;
 };
 
 onMounted(() => {
@@ -21,5 +24,23 @@ onMounted(() => {
   <div>
     <button>새 글 작성</button>
   </div>
-  <main>글 리스트</main>
+  <main>
+    <div v-for="item in list">
+      <post
+        :title="item.title"
+        :content="item.content"
+        :author="item.email"
+        :id="item.id"
+        :comment="JSON.parse(item.comment)"
+      />
+    </div>
+  </main>
 </template>
+
+<style scoped>
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+</style>
