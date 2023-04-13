@@ -1,3 +1,29 @@
+<template>
+  <li class="post">
+    <div class="titleAndAuthor">
+      <h3>
+        {{ props.title }}
+      </h3>
+      <span>{{ props.author }}</span>
+    </div>
+    <hr />
+    <div class="content">
+      {{ content }}
+    </div>
+    <hr />
+    <div
+      v-for="item in props.comment"
+      v-bind:key="item.content"
+      class="comment"
+    >
+      <span class="commentAuthor"> {{ item.email }}: </span>
+      <span>
+        {{ item.content }}
+      </span>
+    </div>
+  </li>
+</template>
+
 <script setup lang="ts">
 import { defineProps } from "vue";
 interface PostProps {
@@ -6,35 +32,13 @@ interface PostProps {
   author: string;
   id: number;
   comment: {
-    author: string;
+    email: string;
     content: string;
   }[];
 }
 
-const { author, content, title, comment } = defineProps<PostProps>();
+const props = defineProps<PostProps>();
 </script>
-
-<template>
-  <li class="post">
-    <div class="titleAndAuthor">
-      <h3>
-        {{ title }}
-      </h3>
-      <span>{{ author }}</span>
-    </div>
-    <hr />
-    <div class="content">
-      {{ content }}
-    </div>
-    <hr />
-    <div v-for="item in comment" v-bind:key="item.id" class="comment">
-      <span class="commentAuthor"> {{ item.author }}: </span>
-      <span>
-        {{ item.content }}
-      </span>
-    </div>
-  </li>
-</template>
 
 <style scoped>
 .post {
